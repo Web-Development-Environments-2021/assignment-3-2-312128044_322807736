@@ -1,0 +1,7 @@
+.env
+dist
+package-lock.json
+package.json
+launch.json
+node_modules
+.vscode

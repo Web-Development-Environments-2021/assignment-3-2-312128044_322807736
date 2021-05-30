@@ -6,7 +6,7 @@ const api_domain = "https://soccer.sportmonks.com/api/v2.0";
 
 async function getPlayerDetailsByID(playerId) {
   const player = await axios.get(
-    `https://soccer.sportmonks.com/api/v2.0/playars/${playerId}`,
+    `https://soccer.sportmonks.com/api/v2.0/players/${playerId}`,
     {
       params: {
         api_token: process.env.api_token,
@@ -14,7 +14,7 @@ async function getPlayerDetailsByID(playerId) {
     }
   );
   return {
-    player_details: player,
+    player_details: player.data,
     // next game details should come from DB
   };
 }
@@ -69,3 +69,4 @@ async function getPlayersByTeam(team_id) {
 
 exports.getPlayersByTeam = getPlayersByTeam;
 exports.getPlayersInfo = getPlayersInfo;
+exports.getPlayerDetailsByID = getPlayerDetailsByID;

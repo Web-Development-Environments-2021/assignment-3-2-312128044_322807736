@@ -123,7 +123,7 @@ paths:
           description: The player successfully saved as favorite
         "401":
           description: user is not authorized
-  /teams/teamFullDetails/{teamId}:
+  /teams/playerFullDetails/{teamId}:
     get:
       summary: get full details about a team
       description: useful for team page
@@ -145,7 +145,7 @@ paths:
                 $ref: "#/components/schemas/Team"
         "404":
           description: teamId is not exists
-  /players/playerFullsDetails/{playerId}:
+  /players/playerFullDetails/{playerId}:
     summary: Represents a specific player
     description: >
       This resource represents an individual player in the system.
@@ -228,7 +228,27 @@ paths:
                     $ref: '#/components/schemas/FutureGame'
         '400':
           description: Wrong input parameters      
-  
+  /league/addGame:
+     post:
+      tags:
+        - League
+        - Games
+      summary: adding a game to the system
+      description: representor of the "unit of soccer" adding a game to the system
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FutureGame"
+      responses:
+        "201":
+          description:  a new game added to the system
+        "401":
+          description: Authentication failed
+        '500':
+          description: the server has encountered a situation it doesnt know how to handle.
+
   
 components:
   schemas:
@@ -324,55 +344,6 @@ components:
           type: string
           description: player's team name
           example: København
-    
-          PlayerPostview:
-      type: object
-      description: A JSON object contains all the personal details of a coah or a player.
-      properties:
-          Nationality:
-            type: string
-            description: the player's nationality
-            example: Israeli
-          Birthdate:
-            type: string
-            format: date
-            description: the date of the player's birth
-            example: 23/06/1994
-          BirthCountry:
-            type: string
-            description: > 
-              the country of the user 
-            example:  Bikini Bottom
-          Height:
-            type: string
-            description: the player's height in cm
-            example: 1.74cm
-          
-          Weight:
-            type: string
-            description: the player's weight in kg
-            example: 89kg
-    
-     PlayerPreview:
-      type: object
-      properties:
-        fullName:
-          type: string
-          description: player's full name
-          example: Sten Michael Grytebust
-        imageUrl:
-          type: string
-          description: player's image
-          format: URL
-          example: https://cdn.sportmonks.com/images/soccer/players/11/84587.png
-        positionNum:
-          type: integer
-          description: player's position in team
-          example: 1
-        teamName:
-          type: string
-          description: player's team name
-          example: København
     PlayerPostview:
       type: object
       description: A JSON object contains all the personal details of a coah or a player.
@@ -385,7 +356,7 @@ components:
             type: string
             format: date
             description: the date of the player's birth
-            example: 23/06/1994
+            example: "1994-04-23"
           BirthCountry:
             type: string
             description: > 
@@ -419,59 +390,10 @@ components:
         teamName:
           type: string
           description: player's team name
-          example: København
-    
-          PlayerPostview:
-      type: object
-      description: A JSON object contains all the personal details of a coah or a player.
-      properties:
-          Nationality:
-            type: string
-            description: the player's nationality
-            example: Israeli
-          Birthdate:
-            type: string
-            format: date
-            description: the date of the player's birth
-            example: 23/06/1994
-          BirthCountry:
-            type: string
-            description: > 
-              the country of the user 
-            example:  Bikini Bottom
-          Height:
-            type: string
-            description: the player's height in cm
-            example: 1.74cm
-          
-          Weight:
-            type: string
-            description: the player's weight in kg
-            example: 89kg
-    
-     PlayerPreview:
-      type: object
-      properties:
-        fullName:
-          type: string
-          description: player's full name
-          example: Sten Michael Grytebust
-        imageUrl:
-          type: string
-          description: player's image
-          format: URL
-          example: https://cdn.sportmonks.com/images/soccer/players/11/84587.png
-        positionNum:
-          type: integer
-          description: player's position in team
-          example: 1
-        teamName:
-          type: string
-          description: player's team name
-          example: København
+          example: København   
     CoachPostview:
-       type: object
-      description: A JSON object contains all the personal details of a coah or a player.
+      type: object
+      description: A JSON object contains all the personal details of a coach or a player.
       properties:
           Nationality:
             type: string
@@ -481,7 +403,7 @@ components:
             type: string
             format: date
             description: the date of the player's birth
-            example: 23/06/1994
+            example: "1994-06-28"
           BirthCountry:
             type: string
             description: > 
@@ -495,17 +417,21 @@ components:
           type: integer
           example: 6
         away_team_id:
-         type: integer
+          type: integer
           example: 939
         game_date:
           type: string
           format: date
-          description: the date in which the game occured
-          example: 16/05/2021
+          description: the date in which the game occurred
+          example: "2021-05-16"
         fieldId:
           type: int
-          description: the field the game was played on
-          example: Teddy  
+          description: the id of the field the game was played on
+          example: 2  
+        coachId:
+          type: int
+          description:  id the cocah of the game
+          example: 12 
     PastGame:
       type: object
       description: an object containing all info of Game that occurred
@@ -520,7 +446,7 @@ components:
           type: string
           format: date
           description: the date in which the game occurred
-          example: 16/05/2021
+          example: "2021-05-16"
         h_score:
           type: integer
           description: number of goals made by home team
@@ -534,7 +460,11 @@ components:
         fieldId:
           type: int
           description: the field the game was played on
-          example: Teddy
+          example: 12
+        coachId:
+          type: int
+          description:  id the coach of the game
+          example: 12 
         Events:
           type: array
           description: all the events that occured in the game

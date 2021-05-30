@@ -2,14 +2,14 @@ var express = require("express");
 var router = express.Router();
 const DButils = require("../routes/utils/DButils");
 const bcrypt = require("bcryptjs");
-
+var users_counter_id =0;
 router.post("/Register", async (req, res, next) => {
   try {
     // parameters exists
     // valid parameters
     // username exists
     const users = await DButils.execQuery(
-      "SELECT username FROM dbo.users_tirgul"
+      "SELECT username FROM dbo.Users"
     );
 
     if (users.find((x) => x.username === req.body.username))
@@ -21,10 +21,11 @@ router.post("/Register", async (req, res, next) => {
       parseInt(process.env.bcrypt_saltRounds)
     );
     req.body.password = hash_password;
-
+    
     // add the new username
     await DButils.execQuery(
-      `INSERT INTO dbo.users_tirgul (username, password) VALUES ('${req.body.username}', '${hash_password}')`
+      `Insert into dbo.Users(id,username, firstName,	lastName,country, password, email,	imageUrl)
+        VALUES ('${users_counter_id++}','${req.body.username}', '${req.body.firstName}', '${req.body.lastName}','${req.body.country}','${hash_password}','${req.body.email}','${req.body.imageUrl}')`
     );
     res.status(201).send("user created");
   } catch (error) {
@@ -36,7 +37,7 @@ router.post("/Login", async (req, res, next) => {
   try {
     const user = (
       await DButils.execQuery(
-        `SELECT * FROM dbo.users_tirgul WHERE username = '${req.body.username}'`
+        `SELECT * FROM dbo.Users WHERE username = '${req.body.username}'`
       )
     )[0];
     // user = user[0];

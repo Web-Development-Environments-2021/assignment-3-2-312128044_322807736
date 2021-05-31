@@ -40,8 +40,7 @@ router.post("/Login", async (req, res, next) => {
         `SELECT * FROM dbo.Users WHERE username = '${req.body.username}'`
       )
     )[0];
-    // user = user[0];
-    console.log(user);
+    
 
     // check that username exists & the password is correct
     if (!user || !bcrypt.compareSync(req.body.password, user.password)) {
@@ -49,8 +48,8 @@ router.post("/Login", async (req, res, next) => {
     }
 
     // Set cookie
-    req.session.user_id = user.user_id;
-
+    req.session.id = user.id;
+    console.log(req.session);
     // return cookie
     res.status(200).send("login succeeded");
   } catch (error) {

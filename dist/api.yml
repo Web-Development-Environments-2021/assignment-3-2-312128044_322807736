@@ -292,6 +292,10 @@ components:
           type: string
           description: URL for the user's image
           example: https://cloudinary.com/
+        title:
+          description: user's title
+          type: string
+          example: referee
       description: Model containing user info
     LoginScheme:
       type: object
@@ -348,26 +352,30 @@ components:
       type: object
       description: A JSON object contains all the personal details of a coah or a player.
       properties:
-          Nationality:
+          commonName:
+            type: string
+            description: name by which the player is commonly refered to by
+            example: Diego Maradona
+          nationality:
             type: string
             description: the player's nationality
             example: Israeli
-          Birthdate:
+          birthdate:
             type: string
             format: date
             description: the date of the player's birth
-            example: "1994-04-23"
-          BirthCountry:
+            example: "1994-06-23"
+          birthCountry:
             type: string
             description: > 
               the country of the user 
             example:  Bikini Bottom
-          Height:
+          height:
             type: string
             description: the player's height in cm
             example: 1.74cm
           
-          Weight:
+          weight:
             type: string
             description: the player's weight in kg
             example: 89kg

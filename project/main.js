@@ -58,10 +58,10 @@ const players = require("./routes/players");
 //#region cookie middleware
 app.use(function (req, res, next) {
   if (req.session && req.session.user_id) {
-    DButils.execQuery("SELECT id FROM users")
+    DButils.execQuery("SELECT user_id FROM users")
       .then((users) => {
-        if (users.find((x) => x.id === req.session.user_id)) {
-          req.id = req.session.user_id;
+        if (users.find((x) => x.user_id === req.session.user_id)) {
+          req.user_id = req.session.user_id;
         }
         next();
       })
@@ -71,6 +71,14 @@ app.use(function (req, res, next) {
   }
 });
 //#endregion
+
+app.get("/",function(req,res,next) 
+{
+  res.redirect("/league/getDetails");
+  
+}
+);
+
 
 // ----> For cheking that our server is alive
 app.get("/alive", (req, res) => res.send("I'm alive"));
@@ -87,9 +95,7 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500).send(err.message);
 });
 
-app.get("/home", (req, res) => {
-  res.sendFile(__dirname + "/index.html");
-});
+
 
 const server = app.listen(port, () => {
   console.log(`Server listen on port ${port}`);

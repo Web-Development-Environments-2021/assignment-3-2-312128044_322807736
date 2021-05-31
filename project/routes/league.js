@@ -14,12 +14,16 @@ router.get("/getDetails", async (req, res, next) => {
 
 router.use("/addGame",async function (req, res, next) {
   console.log(req.session)
-  if (req.session && req.session.id) {
-    DButils.execQuery("SELECT id FROM Users where title = 'FAR' ")
+  if (req.session && req.session.user_id) {
+    DButils.execQuery("SELECT user_id FROM Users where title = 'FAR' ")
       .then((users) => {
-        if (users.find((x) => x.id === req.session.id)) {
-          req.id = req.session.id;
+        if (users.find((x) => x.user_id === req.session.user_id)) {
+          req.user_id = req.session.user_id;
           next();
+        }
+        else
+        {
+          res.status(401).send("only represntitive can add games you fucking asshole")
         }
       })
       .catch((err) => next(err));

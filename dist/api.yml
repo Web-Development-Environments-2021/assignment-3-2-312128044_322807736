@@ -205,7 +205,7 @@ paths:
                     $ref: '#/components/schemas/CoachPostview'
         '400':
             description: Wrong input parameters  
-  /gamesOfTheSeason:
+  /games/gamesOfTheSeason:
     get:
       tags:
         - Games

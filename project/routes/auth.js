@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 const DButils = require("../routes/utils/DButils");
 const bcrypt = require("bcryptjs");
-var users_counter_id =0;
+
 router.post("/Register", async (req, res, next) => {
   try {
     // parameters exists

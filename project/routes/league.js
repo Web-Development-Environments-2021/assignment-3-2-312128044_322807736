@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 const league_utils = require("./utils/league_utils");
 const DButils = require("./utils/DButils");
+
 router.get("/getDetails", async (req, res, next) => {
   try {
     const league_details = await league_utils.getLeagueDetails();
@@ -13,7 +14,6 @@ router.get("/getDetails", async (req, res, next) => {
 
 
 router.use("/addGame",async function (req, res, next) {
-  console.log(req.session)
   if (req.session && req.session.user_id) {
     DButils.execQuery("SELECT user_id FROM Users where title = 'FAR' ")
       .then((users) => {
@@ -23,7 +23,7 @@ router.use("/addGame",async function (req, res, next) {
         }
         else
         {
-          res.status(401).send("only represntitive can add games you fucking asshole")
+          res.status(401).send("only representative can add games")
         }
       })
       .catch((err) => next(err));

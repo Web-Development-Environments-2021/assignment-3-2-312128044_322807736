@@ -123,7 +123,29 @@ paths:
           description: The player successfully saved as favorite
         "401":
           description: user is not authorized
-  /teams/playerFullDetails/{teamId}:
+  /teams/teamFullDetails/{teamId}:
+    get:
+      summary: get full details about a team
+      description: useful for team page
+      tags:
+        - Teams
+      parameters:
+        - in: path
+          name: teamId
+          description: team's id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: data about the team
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Team"
+        "404":
+          description: teamId is not exists
+  /teams/teamFullDetails/search/{teamName}:
     get:
       summary: get full details about a team
       description: useful for team page

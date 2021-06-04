@@ -13,8 +13,6 @@ router.get("/gamesOfTheSeason", async (req, res, next) => {
         "SELECT * from games where CAST( GETDATE() AS DATE )>game_date ;"
       );
 
-      console.log(futureGames);
-      console.log(pastGames);
       res.send({"pastGames": pastGames,
                 "futureGames": futureGames });
   

@@ -11,6 +11,7 @@ tags:
   - name: Teams
   - name: Games
   - name: Coaches
+  - name: leagueManagement
 paths:
   /Register:
     post:
@@ -153,8 +154,8 @@ paths:
         - Teams
       parameters:
         - in: path
-          name: teamId
-          description: team's id
+          name: teamName
+          description: team's partial name
           required: true
           schema:
             type: integer
@@ -166,7 +167,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Team"
         "404":
-          description: teamId is not exists
+          description: 'there is not any team with that partial name in the DB'
   /players/playerFullDetails/{playerId}:
     summary: Represents a specific player
     description: >
@@ -197,6 +198,28 @@ paths:
                     $ref: '#/components/schemas/PlayerPostview'
         '400':
             description: Wrong input parameters  
+  /players/playerFullDetails/search/{playerName}:
+    get:
+      summary: get full details about a player
+      description: useful for player page
+      tags:
+        - Players
+      parameters:
+        - in: path
+          name: playerName
+          description: player partial name
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: data about the player
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Player"
+        "404":
+          description: 'there is not any player with that partial name in the DB'
   /coaches/coachFullsDetails/{coachId}:
     summary: Represents a specific coach
     description: >
@@ -250,7 +273,32 @@ paths:
                     $ref: '#/components/schemas/FutureGame'
         '400':
           description: Wrong input parameters      
-  /league/addGame:
+  
+  /leagueManagement:
+    get:
+      tags:
+        - leagueManagement
+      summary: Get all data of games of this season
+      description: Get arrays of games of this season
+      responses:
+        '200':
+          description: Data of past games
+          content:
+           application/json:
+            schema:
+              properties:
+                pastGames:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/PastGame'
+                futureGames:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/FutureGame'
+        '400':
+          description: Wrong input parameters  
+
+  /leagueManagement/addGame:
      post:
       tags:
         - League
@@ -269,7 +317,7 @@ paths:
         "401":
           description: Authentication failed
         '500':
-          description: the server has encountered a situation it doesnt know how to handle.
+          description: the server has encountered a situation it doesn't know how to handle.
 
   
 components:

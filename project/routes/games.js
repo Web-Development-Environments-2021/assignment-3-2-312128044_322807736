@@ -15,8 +15,8 @@ router.get("/gamesOfTheSeason", async (req, res, next) => {
 
       console.log(futureGames);
       console.log(pastGames);
-      res.send({pastGames: pastGames,
-                futureGames: futureGames  });
+      res.send({"pastGames": pastGames,
+                "futureGames": futureGames });
   
       next();
     });

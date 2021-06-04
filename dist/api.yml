@@ -173,7 +173,7 @@ paths:
       This resource represents an individual player in the system.
       Each player is identified by their full name.
     tags:
-        - Players
+      - Players
     get:
       description: Gets a player by his id.
       operationId: getPlayerById
@@ -203,7 +203,7 @@ paths:
       This resource represents an individual coach in the system.
       Each coach is identified by their full name.
     tags:
-        - Coaches
+      - Coaches
     get:
       description: Gets a coach by his id.
       operationId: getCoachById
@@ -458,9 +458,9 @@ components:
           type: int
           description: the id of the field the game was played on
           example: 2  
-        coachId:
+        refereeId:
           type: int
-          description:  id the cocah of the game
+          description:  id of the referee of the game
           example: 12 
     PastGame:
       type: object
@@ -491,9 +491,9 @@ components:
           type: int
           description: the field the game was played on
           example: 12
-        coachId:
+        refereeId:
           type: int
-          description:  id the coach of the game
+          description:  id of the referee of the game
           example: 12 
         Events:
           type: array

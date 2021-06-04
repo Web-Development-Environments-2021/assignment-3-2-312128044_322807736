@@ -6,7 +6,12 @@ const DButils = require("./utils/DButils");
 router.get("/getDetails", async (req, res, next) => {
   try {
     const league_details = await league_utils.getLeagueDetails();
-    res.send(league_details);
+    if(league_details === null){
+      res.send(404, "Please try another time, there is no league in the time being.");
+    }
+    else{
+      res.send(league_details);
+    }
   } catch (error) {
     next(error);
   }
@@ -41,9 +46,7 @@ router.post("/addGame", async (req, res, next) => {
     const games = await DButils.execQuery(
       "SELECT home_team_id, away_team_id,game_date FROM dbo.Games"
     );
-    const next_id =await DButils.execQuery(
-      "SELECT COUNT(home_team_id) as c FROM dbo.Games"
-    );
+   
     if (games.find((x) => x.home_team_id === req.body.home_team_id && 
         x.away_team_id === req.body.away_team_id &&
         x.game_date === req.body.game_date ))
@@ -52,8 +55,8 @@ router.post("/addGame", async (req, res, next) => {
     
     // add the new username
     await DButils.execQuery(
-      `Insert into dbo.Games(game_id,home_team_id,away_team_id, game_date, field, referee_id)
-        VALUES ('${ next_id[0]['c']+1}','${req.body.home_team_id}', '${req.body.away_team_id}', '${req.body.game_date}','${req.body.fieldId}','${req.body.coachId}')`
+      `Insert into dbo.Games(home_team_id,away_team_id, game_date, fieldId, refereeId)
+        VALUES ('${req.body.home_team_id}', '${req.body.away_team_id}', '${req.body.game_date}','${req.body.fieldId}','${req.body.refereeId}')`
     );
     res.status(201).send("game added successfully");
   } catch (error) {

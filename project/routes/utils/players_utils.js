@@ -1,4 +1,5 @@
 const axios = require("axios");
+
 const api_domain = "https://soccer.sportmonks.com/api/v2.0";
 // const TEAM_ID = "85";
 
@@ -33,6 +34,7 @@ async function getPlayerIdsByTeam(team_id) {
 }
 
 async function getPlayersInfo(players_ids_list) {
+  
   let promises = [];
   players_ids_list.map((id) =>
     promises.push(
@@ -44,7 +46,10 @@ async function getPlayersInfo(players_ids_list) {
       })
     )
   );
-  let players_info = await Promise.all(promises);
+  let promise_info = await Promise.all(promises);
+  
+  let players_info = []
+  promise_info.map((prom) => players_info.push(prom))
   return extractRelevantPlayerData(players_info);
 }
 
@@ -63,6 +68,7 @@ function extractRelevantPlayerData(players_info) {
 
 async function getPlayersByTeam(team_id) {
   let player_ids_list = await getPlayerIdsByTeam(team_id);
+  
   let players_info = await getPlayersInfo(player_ids_list);
   return players_info;
 }

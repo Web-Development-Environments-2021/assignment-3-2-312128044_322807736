@@ -22,7 +22,8 @@ router.get("/teamFullDetails/search/:teamName", async (req, res, next) => {
 
   try {
     const team_ids = await team_utils.getTeamIDByName(req.params.teamName);
-    team_details = await team_utils.getTeamsInfo(team_ids);
+    
+    const team_details = await team_utils.getTeamsInfo(team_ids);
     //we should keep implementing team page.....
     res.send(team_details);
   } catch (error) {

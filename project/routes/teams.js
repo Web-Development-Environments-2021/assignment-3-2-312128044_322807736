@@ -10,8 +10,16 @@ router.get("/teamFullDetails/:teamId", async (req, res, next) => {
     const team_details = await players_utils.getPlayersByTeam(
       req.params.teamId
     );
+    const name = team_details.player_details[0].team_name;
+    
+    var full_details = 
+    {
+      "name": name,
+      "players":team_details.player_details,
+      "teamLogo": team_details.teamLogo
+    };
     //we should keep implementing team page.....
-    res.send(team_details);
+    res.send(full_details);
   } catch (error) {
     next(error);
   }
@@ -22,10 +30,23 @@ router.get("/teamFullDetails/search/:teamName", async (req, res, next) => {
 
   try {
     const team_ids = await team_utils.getTeamIDByName(req.params.teamName);
+    if(team_ids == -1)
+    {
+      res.status(404).send("no results match your query, try typing in different name or partial name");
+    }
+    else
+    {
+      const team_details = await team_utils.getTeamsInfo(team_ids);
+      const name = team_details.player_details[0].team_name;
+      let full_dets = 
+      {
+        "name": name,
+        "players":team_details.player_details,
+        "teamLogo": team_details.teamLogo
+      }
+      res.send(full_dets);
+    }
     
-    const team_details = await team_utils.getTeamsInfo(team_ids);
-    //we should keep implementing team page.....
-    res.send(team_details);
   } catch (error) {
     next(error);
   }

@@ -11,7 +11,7 @@ router.get("/playerFullDetails/:playerID", async (req, res, next) => {
     const player_details = await players_utils.getPlayerDetailsByID(req.params.playerID);
     var dets =player_details.player_details.data;
     var teamName = await team_utils.getTeamNameByID(dets.team_id);
-    console.log(teamName);
+    
     var alldets =
     {
       "fullName" : dets.fullname,
@@ -36,6 +36,16 @@ router.get("/playerFullDetails/:playerID", async (req, res, next) => {
   }
 });
 
-router.get("/")
+router.get("/playerFullDetails/search/:playerName", async (req, res, next) => {
+  try
+  {
+    let players_details = players_utils.getPlayersDetailsByName(req.params.playerName);
+    
+  }
+  catch (error) {
+    next(error);
+  }
+}
+)
 
 module.exports = router;

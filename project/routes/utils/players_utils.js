@@ -3,8 +3,17 @@ const axios = require("axios");
 const api_domain = "https://soccer.sportmonks.com/api/v2.0";
 // const TEAM_ID = "85";
 
-
-
+async function getPlayersDetailsByName(playerNames) {
+  const players = await axios.get(
+    `https://soccer.sportmonks.com/api/v2.0/players/${playerNames}`,
+    {
+      params: {
+        api_token: process.env.api_token,
+      },
+    }
+  );
+  return players.data.data;
+}
 async function getPlayerDetailsByID(playerId) {
   const player = await axios.get(
     `https://soccer.sportmonks.com/api/v2.0/players/${playerId}`,
@@ -30,10 +39,15 @@ async function getPlayerIdsByTeam(team_id) {
   team.data.data.squad.data.map((player) =>
     player_ids_list.push(player.player_id)
   );
-  return player_ids_list;
-}
+  let toReturn =
+  {"player_list": player_ids_list,
+  "teamLogo" : team.data.data.logo_path 
+  };
+  return toReturn;
+ }
 
-async function getPlayersInfo(players_ids_list) {
+
+async function getPlayersInfo(players_ids_list, teamLogo) {
   
   let promises = [];
   players_ids_list.map((id) =>
@@ -50,7 +64,12 @@ async function getPlayersInfo(players_ids_list) {
   
   let players_info = []
   promise_info.map((prom) => players_info.push(prom))
-  return extractRelevantPlayerData(players_info);
+  let rel_info = extractRelevantPlayerData(players_info);
+  let toReturn = {
+    "player_details": rel_info,
+    "teamLogo": teamLogo
+  };
+  return toReturn;
 }
 
 function extractRelevantPlayerData(players_info) {
@@ -69,12 +88,12 @@ function extractRelevantPlayerData(players_info) {
 async function getPlayersByTeam(team_id) {
   let player_ids_list = await getPlayerIdsByTeam(team_id);
   
-  let players_info = await getPlayersInfo(player_ids_list);
+  let players_info = await getPlayersInfo(player_ids_list.player_list, player_ids_list.teamLogo);
   return players_info;
 }
 
 exports.getPlayersByTeam = getPlayersByTeam;
-exports.getPlayersInfo = getPlayersInfo;
+exports.getPlayersDetailsByName = getPlayersDetailsByName;
 
 exports.getPlayerDetailsByID = getPlayerDetailsByID;
 

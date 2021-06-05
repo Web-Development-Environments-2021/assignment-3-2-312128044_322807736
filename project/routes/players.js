@@ -39,8 +39,21 @@ router.get("/playerFullDetails/:playerID", async (req, res, next) => {
 router.get("/playerFullDetails/search/:playerName", async (req, res, next) => {
   try
   {
-    let players_details = players_utils.getPlayersDetailsByName(req.params.playerName);
-    
+    const players_details = await players_utils.getPlayersDetailsByName(req.params.playerName);
+    const pd = players_details.data
+    let player_arr = [];
+    for(index in pd)
+    {
+        let player = pd[index];
+        player_arr.push(players_utils.extractFullData(player))
+
+    }
+    if(player_arr.length == 0)
+    {
+      res.status(404).send("no matches found for query, please try a different name");
+    }
+    else
+      res.send(player_arr);
   }
   catch (error) {
     next(error);

@@ -250,15 +250,15 @@ paths:
                     $ref: '#/components/schemas/CoachPostview'
         '400':
             description: Wrong input parameters  
-  /games/gamesOfTheSeason:
+  /games/gamesOfTheStage:
     get:
       tags:
         - Games
-      summary: Get all data of games of this season
-      description: Get arrays of games of this season
+      summary: Get all data of games of this stage
+      description: Get arrays of games of this stage
       responses:
         '200':
-          description: Data of past games
+          description: Data of games
           content:
            application/json:
             schema:
@@ -273,8 +273,7 @@ paths:
                     $ref: '#/components/schemas/FutureGame'
         '400':
           description: Wrong input parameters      
-  
-  /leagueManagement:
+  /leagueManagement/:
     get:
       tags:
         - leagueManagement
@@ -297,11 +296,10 @@ paths:
                     $ref: '#/components/schemas/FutureGame'
         '400':
           description: Wrong input parameters  
-
   /leagueManagement/addGame:
      post:
       tags:
-        - League
+        - leagueManagement
         - Games
       summary: adding a game to the system
       description: representor of the "unit of soccer" adding a game to the system
@@ -502,14 +500,18 @@ components:
           format: date
           description: the date in which the game occurred
           example: "2021-05-16"
-        fieldId:
-          type: int
-          description: the id of the field the game was played on
-          example: 2  
-        refereeId:
-          type: int
-          description:  id of the referee of the game
-          example: 12 
+        field:
+          type: string
+          description: the name of the field the game was played on
+          example: 'Soccer City'  
+        referee:
+          type: string
+          description:  name of the referee of the game
+          example: 'Tom Henning Ovrebo'
+        stage:
+          type: string
+          description:  the stage of the game
+          example: 'playoff'
     PastGame:
       type: object
       description: an object containing all info of Game that occurred
@@ -535,14 +537,18 @@ components:
           description: number of goals made by away team
           example: 7
           minimum: 0
-        fieldId:
-          type: int
-          description: the field the game was played on
-          example: 12
-        refereeId:
-          type: int
-          description:  id of the referee of the game
-          example: 12 
+        field:
+          type: string
+          description: the name of the field the game was played on
+          example: 'Soccer City'  
+        referee:
+          type: string
+          description:  name of the referee of the game
+          example: 'Tom Henning Ovrebo'
+        stage:
+          type: string
+          description:  the stage of the game
+          example: 'playoff'
         Events:
           type: array
           description: all the events that occured in the game
@@ -572,7 +578,8 @@ components:
                 example: 35
                 minimum: 0
                 
-          minLength: 3     
+          minLength: 3   
+         
     Team:
       type: object
       properties:

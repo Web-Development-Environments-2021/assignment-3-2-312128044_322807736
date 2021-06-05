@@ -7,11 +7,21 @@ const game_utils = require("./utils/game_utils");
 router.get("/", async (req, res, next) => {
 
   const futureGames = await DButils.execQuery(
-      "SELECT * from games where CAST( GETDATE() AS DATE )<=game_date ;"
+    "SELECT g.game_id,g.home_team_id ,g.away_team_id,g.game_date, g.stage,"+
+    "r.name as referee ,f.name as field " +
+    "from games as g "+
+    "inner join referees as r on r.referee_id = g.refereeId "+
+    "inner join [dbo].[Fields] as f on f.field_id = g.fieldId "+
+    "where CAST(GETDATE() AS DATE )<=game_date"
     );
   const pastGames = await DButils.execQuery(
-      "SELECT * from games where CAST( GETDATE() AS DATE )>game_date ;"
-    );
+      "SELECT g.game_id,g.home_team_id,g.away_team_id,g.game_date, g.h_score,g.a_score, g.eventLogId ,g.stage,"+
+      "r.name as referee ,f.name as field "+
+      "from games as g "+
+      "inner join referees as r on r.referee_id = g.refereeId "+
+      "inner join [dbo].[Fields] as f on f.field_id = g.fieldId "+
+      "where CAST( GETDATE() AS DATE )>game_date"  
+  );
   const EventLogs = await DButils.execQuery(
     "SELECT * from Events ;"
   );

@@ -5,21 +5,31 @@ const DButils = require("./utils/DButils");
 const game_utils = require("./utils/game_utils");
 
 
-router.get("/gamesOfTheSeason", async (req, res, next) => {
+router.get("/gamesOfTheStage", async (req, res, next) => {
 
-    const futureGames = await DButils.execQuery(
-        "SELECT * from games where CAST( GETDATE() AS DATE )<=game_date ;"
+    const futureGamesOfTheStage = await DButils.execQuery(
+      "SELECT g.game_id,g.home_team_id ,g.away_team_id,g.game_date,g.stage, "+
+      "r.name as referee ,f.name as field " +
+      "from games as g "+
+      "inner join referees as r on r.referee_id = g.refereeId "+
+      "inner join [dbo].[Fields] as f on f.field_id = g.fieldId "+
+      "where CAST(GETDATE() AS DATE )<=game_date and stage = 'playoff' "
       );
-    const pastGames = await DButils.execQuery(
-        "SELECT * from games where CAST( GETDATE() AS DATE )>game_date ;"
-      );
+    const pastGamesOfTheStage = await DButils.execQuery(
+        "SELECT g.game_id,g.home_team_id,g.away_team_id,g.game_date, g.h_score,g.a_score, g.eventLogId ,g.stage,"+
+        "r.name as referee ,f.name as field "+
+        "from games as g "+
+        "inner join referees as r on r.referee_id = g.refereeId "+
+        "inner join [dbo].[Fields] as f on f.field_id = g.fieldId "+
+        "where CAST( GETDATE() AS DATE )>game_date and stage = 'playoff'"  
+    );
+
     const EventLogs = await DButils.execQuery(
       "SELECT * from Events ;"
     );
-    game_utils.addEvents(pastGames,EventLogs);
-    
-      res.send({"pastGames": pastGames,
-                "futureGames": futureGames });
+    game_utils.addEvents(pastGamesOfTheStage,EventLogs);
+    res.send({"pastGames": pastGamesOfTheStage,
+                "futureGames": futureGamesOfTheStage });
   
       next();
     });

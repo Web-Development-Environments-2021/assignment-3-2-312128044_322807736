@@ -68,13 +68,20 @@ router.post("/addGame", async (req, res, next) => {
           x.game_date === req.body.game_date ))
         throw { status: 409, message: "game already exists" };
     
+      let valid = await game_utils.checkValid(req);
+      if(!valid)
+      {
+        res.status(400).send("invalid game details, please check the API");
+      }
+      // add the new game
+      else{
+        await DButils.execQuery(
+          `Insert into dbo.Games(home_team_id,away_team_id, game_date, fieldId, refereeId,stage)
+            VALUES ('${req.body.home_team_id}', '${req.body.away_team_id}', '${req.body.game_date}','${req.body.fieldId}','${req.body.refereeId}','${req.body.stage}')`
+        );
+        res.status(201).send("game added successfully");
+      }
       
-      // add the new username
-      await DButils.execQuery(
-        `Insert into dbo.Games(home_team_id,away_team_id, game_date, fieldId, refereeId)
-          VALUES ('${req.body.home_team_id}', '${req.body.away_team_id}', '${req.body.game_date}','${req.body.fieldId}','${req.body.refereeId}')`
-      );
-      res.status(201).send("game added successfully");
     } catch (error) {
       next(error);
     }

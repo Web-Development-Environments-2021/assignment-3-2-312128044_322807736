@@ -6,6 +6,7 @@ const DButils = require("./utils/DButils");
 let app = express();
 
 router.get("/playerFullDetails/:playerID", async (req, res, next) => {
+  // get player full details by ID
   try {
 
     const player_details = await players_utils.getPlayerDetailsByID(req.params.playerID);
@@ -37,6 +38,7 @@ router.get("/playerFullDetails/:playerID", async (req, res, next) => {
 });
 
 router.get("/playerFullDetails/search/:playerName", async (req, res, next) => {
+  // get player full details of all player matching the name
   try
   {
     const players_details = await players_utils.getPlayersDetailsByName(req.params.playerName);
@@ -44,11 +46,21 @@ router.get("/playerFullDetails/search/:playerName", async (req, res, next) => {
     let player_arr = [];
     for(index in pd)
     {
+      
         let player = pd[index];
+        try{
+          let lg_id = player.team.data.league.data.id;
+          if(lg_id != 271)
+            continue;
+        }
+        catch{
+          continue;
+        }
+        
         player_arr.push(players_utils.extractFullData(player))
 
     }
-    if(player_arr.length == 0)
+    if(player_arr.length == 0) // if no players found
     {
       res.status(404).send("no matches found for query, please try a different name");
     }

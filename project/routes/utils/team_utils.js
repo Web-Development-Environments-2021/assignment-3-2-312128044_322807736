@@ -4,6 +4,7 @@ const players_utils = require("./players_utils");
 
 async function getTeamNameByID(team_id)
 {
+  // fetch team by id and return it's details
     const team = await axios.get(`${api_domain}/teams/${team_id}`, {
         params: {
           api_token: process.env.api_token,
@@ -19,12 +20,18 @@ async function getTeamIDByName(team_name)
     const team = await axios.get(`${api_domain}/teams/search/${team_name}`, {
         params: {
           api_token: process.env.api_token,
+          include: "league",
         },
       });
+    let filtered_teams = []
+    team.data.data.map(function(team){
+      if(team.league.data.id == 271)
+      filtered_teams.push(team);
+    })
     //if no appropriate teams found, return -1  
-    if(team.data.data.length == 0)
+    if(filtered_teams.length == 0)
       return -1;
-    const id = choose_name(team.data.data,team_name);
+    const id = choose_name(filtered_teams,team_name);
     
     return(id);
 }
@@ -45,6 +52,7 @@ function choose_name(teams,name)
 }
 async function getTeamsInfo(team_ids)
 {   
+  // get the players info for each player in each team
     let teams_info = await players_utils.getPlayersByTeam(team_ids)
     
     return teams_info;

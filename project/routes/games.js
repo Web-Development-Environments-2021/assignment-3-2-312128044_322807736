@@ -6,7 +6,7 @@ const game_utils = require("./utils/game_utils");
 
 
 router.get("/gamesOfTheStage", async (req, res, next) => {
-
+    // fetch future games and past games with cross refrencing of ids to names
     const futureGamesOfTheStage = await DButils.execQuery(
       "SELECT g.game_id,g.home_team_id ,g.away_team_id,g.game_date,g.stage, "+
       "r.name as referee ,f.name as field " +
@@ -27,6 +27,7 @@ router.get("/gamesOfTheStage", async (req, res, next) => {
     const EventLogs = await DButils.execQuery(
       "SELECT * from Events ;"
     );
+    // add events to pastGames
     game_utils.addEvents(pastGamesOfTheStage,EventLogs);
     res.send({"pastGames": pastGamesOfTheStage,
                 "futureGames": futureGamesOfTheStage });

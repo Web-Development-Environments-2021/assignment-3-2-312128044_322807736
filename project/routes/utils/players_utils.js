@@ -4,11 +4,12 @@ const api_domain = "https://soccer.sportmonks.com/api/v2.0";
 // const TEAM_ID = "85";
 
 async function getPlayersDetailsByName(playerNames) {
+  // searches Supermonks API for all players with matching name and returns the full detailes
   const players = await axios.get(
     `https://soccer.sportmonks.com/api/v2.0/players/search/${playerNames}`,
     {
       params: {
-        include: "team",
+        include: "team.league",
         api_token: process.env.api_token,
       },
     }
@@ -17,6 +18,7 @@ async function getPlayersDetailsByName(playerNames) {
   return players.data;
 }
 async function getPlayerDetailsByID(playerId) {
+  // searches Supermonks API for player by it's id and returns his full details
   const player = await axios.get(
     `https://soccer.sportmonks.com/api/v2.0/players/${playerId}`,
     {
@@ -27,10 +29,12 @@ async function getPlayerDetailsByID(playerId) {
   );
   return {
     player_details: player.data,
-    // next game details should come from DB
+    
   };
 }
 async function getPlayerIdsByTeam(team_id) {
+  // searches Supermonks API for players of a certain team by it's ID
+  // returns the team name, player preview detials list and the team logo path
   let player_ids_list = [];
   const team = await axios.get(`${api_domain}/teams/${team_id}`, {
     params: {
@@ -50,7 +54,7 @@ async function getPlayerIdsByTeam(team_id) {
 
 
 async function getPlayersInfo(players_ids_list, teamLogo) {
-  
+  // maps players info through each id
   let promises = [];
   players_ids_list.map((id) =>
     promises.push(
@@ -62,10 +66,12 @@ async function getPlayersInfo(players_ids_list, teamLogo) {
       })
     )
   );
+  // execute promises
   let promise_info = await Promise.all(promises);
   
   let players_info = []
   promise_info.map((prom) => players_info.push(prom))
+  // cuts down player info to relevant data only
   let rel_info = extractRelevantPlayerData(players_info);
   let toReturn = {
     "player_details": rel_info,
@@ -75,6 +81,7 @@ async function getPlayersInfo(players_ids_list, teamLogo) {
 }
 
 function extractRelevantPlayerData(players_info) {
+  // extracts player's relevant data
   return players_info.map((player_info) => {
     const { fullname, image_path, position_id } = player_info.data.data;
     const { name } = player_info.data.data.team.data;
@@ -88,7 +95,7 @@ function extractRelevantPlayerData(players_info) {
 }
 function extractFullData(player)
 {
-  
+  // extracts player's full data
   let team_name ;
   try{
     team_name = player.team.data.name
@@ -114,6 +121,7 @@ function extractFullData(player)
 
 }
 async function getPlayersByTeam(team_id) {
+  // for each player in the team extract his id and use it to get relevant info
   let player_ids_list = await getPlayerIdsByTeam(team_id);
   
   let players_info = await getPlayersInfo(player_ids_list.player_list, player_ids_list.teamLogo);

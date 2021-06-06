@@ -5,7 +5,7 @@ const game_utils = require("./utils/game_utils");
 
 
 router.get("/", async (req, res, next) => {
-
+  // game info for homepage as described in the league_utils
   const futureGames = await DButils.execQuery(
     "SELECT g.game_id,g.home_team_id ,g.away_team_id,g.game_date, g.stage,"+
     "r.name as referee ,f.name as field " +
@@ -34,8 +34,9 @@ router.get("/", async (req, res, next) => {
   });
 
 router.use("/addGame",async function (req, res, next) {
+  // add game to league
     if (req.session && req.session.user_id) {
-      DButils.execQuery("SELECT user_id FROM Users where title = 'FAR' ")
+      DButils.execQuery("SELECT user_id FROM Users where title = 'FAR' ")// check that logged in user is Football Association Represntitive
         .then((users) => {
           if (users.find((x) => x.user_id === req.session.user_id)) {
             req.user_id = req.session.user_id;

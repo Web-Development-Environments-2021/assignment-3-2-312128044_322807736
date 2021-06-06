@@ -5,6 +5,7 @@ const players_utils = require("./utils/players_utils");
 const team_utils = require("./utils/team_utils");
 
 router.get("/teamFullDetails/:teamId", async (req, res, next) => {
+  // returns full details of a team by ID
   let team_details = [];
   try {
     const team_details = await players_utils.getPlayersByTeam(
@@ -18,7 +19,6 @@ router.get("/teamFullDetails/:teamId", async (req, res, next) => {
       "players":team_details.player_details,
       "teamLogo": team_details.teamLogo
     };
-    //we should keep implementing team page.....
     res.send(full_details);
   } catch (error) {
     next(error);
@@ -26,6 +26,7 @@ router.get("/teamFullDetails/:teamId", async (req, res, next) => {
 });
 
 router.get("/teamFullDetails/search/:teamName", async (req, res, next) => {
+  // returns the most relevant team with matching name
   let team_details = [];
 
   try {

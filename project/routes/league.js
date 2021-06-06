@@ -4,6 +4,7 @@ const league_utils = require("./utils/league_utils");
 const DButils = require("./utils/DButils");
 
 router.get("/getDetails", async (req, res, next) => {
+  // fetch details of current league if exists
   try {
     const league_details = await league_utils.getLeagueDetails();
     if(league_details === null){

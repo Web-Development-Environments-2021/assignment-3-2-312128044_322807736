@@ -1,6 +1,8 @@
 
 function addEvents(pastGames, EventLogs)
 {
+  // combines the list of events for a game from the joint table 
+  // with table records of games
     for(ev in EventLogs)
     {
       let gameID = EventLogs[ev]['logEventId'];

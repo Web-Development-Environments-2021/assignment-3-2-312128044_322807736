@@ -44,8 +44,21 @@ async function checkValid(req)
   const fields = await DButils.execQuery("SELECT * FROM dbo.Fields");
   if(!(refs.find((x) => x.referee_id == refereeID))||!(fields.find((x) => x.field_id == fieldID)))
     return false;
-  return true;
+  let date = req.body.game_date;
   
+  return valiDate(date);
+  
+}
+
+function valiDate(date)
+{
+ let time = new Date(date);
+ timec = time.getTime()
+ if (!(timec === timec))
+  return false;
+today = new Date();
+return timec > today.getTime();
+
 }
 exports.checkValid = checkValid;
 exports.addEvents = addEvents;

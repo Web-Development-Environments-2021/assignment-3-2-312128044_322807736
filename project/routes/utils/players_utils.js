@@ -87,10 +87,12 @@ function extractRelevantPlayerData(players_info) {
         // const { name } = players_info.data.data.team.data;
         return {
             name: "Jim",
-            image: "",
-            position: 4,
+            fullname: "jim jim",
+            image_path: "",
+            imageUrl: "",
+            position_id: 4,
             team_name: "Midtjylland"
-            ,
+
         };
     });
 }

@@ -56,7 +56,7 @@ router.get("/teamFullDetails/search/:teamName", async(req, res, next) => {
                 "inner join [dbo].[Teams] as t2 on t2.team_id=g.away_team_id " +
                 `where CAST(GETDATE() AS DATE )>game_date and (t1.teamName = '${name}' or t2.teamName = '${name}')`
             );
-
+            // console.log('*************', team_details);
             let full_dets = {
                 "name": name,
                 "players": team_details.player_details,

@@ -81,14 +81,16 @@ async function getPlayersInfo(players_ids_list, teamLogo) {
 
 function extractRelevantPlayerData(players_info) {
     // extracts player's relevant data
-    return players_info.map((player_info) => {
-        const { fullname, image_path, position_id } = player_info.data.data;
-        const { name } = player_info.data.data.team.data;
+    console.log(players_info.data);
+    return players_info.map((players_info) => {
+        // const { fullname, image_path, position_id } = players_info.data.data;
+        // const { name } = players_info.data.data.team.data;
         return {
-            name: fullname,
-            image: image_path,
-            position: position_id,
-            team_name: name,
+            name: "Jim",
+            image: "",
+            position: 4,
+            team_name: "Midtjylland"
+            ,
         };
     });
 }

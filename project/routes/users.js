@@ -9,6 +9,7 @@ const game_utils = require("./utils/game_utils");
  * Authenticate all incoming requests by middleware
  */
 router.use(async function(req, res, next) {
+    console.log(req.session, req.session.user_id);
     if (req.session && req.session.user_id) {
         DButils.execQuery("SELECT user_id FROM Users")
             .then((users) => {

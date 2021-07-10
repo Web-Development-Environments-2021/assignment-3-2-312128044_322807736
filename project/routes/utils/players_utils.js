@@ -86,11 +86,15 @@ function extractRelevantPlayerData(players_info) {
         // const { fullname, image_path, position_id } = players_info.data.data;
         // const { name } = players_info.data.data.team.data;
         return {
-            name: "Jim",
-            fullname: "jim jim",
-            image_path: "",
-            imageUrl: "",
-            position_id: 4,
+            // fullname: fullname,
+            // imageUrl: image_path,
+            // position_id: position_id,
+            // team_name: name
+
+            fullname: "BEAAAAAAA CUTIEEEEE",
+            // imageUrl: "https://worldwideinterweb.com/wp-content/uploads/2017/10/worst20pictures20ever20taken20gallery.png",
+            imageUrl: "ikflksefn",
+            position_id: 1,
             team_name: "Midtjylland"
 
         };

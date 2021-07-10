@@ -78,8 +78,27 @@ async function getGamesInfo(games_ids_list) {
         }
     }
 
-    const past_games = await DButils.execQuery(`SELECT * FROM dbo.Games where game_id in ${game_id_string} and CAST( GETDATE() AS DATE )>game_date`);
-    const future_games = await DButils.execQuery(`SELECT * FROM dbo.Games where game_id in ${game_id_string} and CAST( GETDATE() AS DATE )<=game_date`);
+    const past_games = await DButils.execQuery(
+        "SELECT g.game_id,t1.teamName as home_team_name,t2.teamName as away_team_name ,g.game_date, g.h_score,g.a_score, g.eventLogId ,g.stage," +
+        "r.name as referee ,f.name as field " +
+        "from games as g " +
+        "inner join referees as r on r.referee_id = g.refereeId " +
+        "inner join [dbo].[Fields] as f on f.field_id = g.fieldId " +
+        "inner join [dbo].[Teams] as t1 on t1.team_id=g.home_team_id " +
+        "inner join [dbo].[Teams] as t2 on t2.team_id=g.away_team_id " +
+        `where  game_id in ${game_id_string} and CAST(GETDATE() AS DATE )>game_date `);
+
+    // `SELECT * FROM dbo.Games where game_id in ${game_id_string} and CAST( GETDATE() AS DATE )>game_date`);
+    const future_games = await DButils.execQuery(
+        "SELECT g.game_id,t1.teamName as home_team_name,t2.teamName as away_team_name ,g.game_date, g.stage," +
+        "r.name as referee ,f.name as field " +
+        "from games as g " +
+        "inner join referees as r on r.referee_id = g.refereeId " +
+        "inner join [dbo].[Fields] as f on f.field_id = g.fieldId " +
+        "inner join [dbo].[Teams] as t1 on t1.team_id=g.home_team_id " +
+        "inner join [dbo].[Teams] as t2 on t2.team_id=g.away_team_id " +
+        `where game_id in ${game_id_string} and CAST(GETDATE() AS DATE )<=game_date`);
+    // `SELECT * FROM dbo.Games where game_id in ${game_id_string} and CAST( GETDATE() AS DATE )<=game_date`);
 
     // execute promises
 

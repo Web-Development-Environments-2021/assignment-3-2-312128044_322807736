@@ -184,7 +184,7 @@ paths:
           description: player's id
           required: true
           schema:
-            type: integer
+          type: integer
       responses:
         '200':
           description: Successful presenting the player page
@@ -210,7 +210,7 @@ paths:
           description: player partial name
           required: true
           schema:
-            type: integer
+            type: string
       responses:
         "200":
           description: data about the player

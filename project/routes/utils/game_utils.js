@@ -44,7 +44,7 @@ async function checkValid(req) {
 }
 
 function valiDate(date) {
-    let time = new Date(date);
+    let time = new Date(date.replace( /(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"));
     timec = time.getTime()
     if (!(timec === timec))
         return false;
